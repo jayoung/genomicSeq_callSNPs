@@ -2,8 +2,13 @@
 
 simple folder to teach Courtney and Risa how to call SNPs in genomic sequence (Drosophila)
 
+## github location
+
+public:
 https://github.com/jayoung/genomicSeq_callSNPs
 
+local:
+/fh/fast/malik_h/user/jayoung/forOtherPeople/forCourtney/genomicSeq_callSNPs
 
 ## download reads to Hutch server
 
