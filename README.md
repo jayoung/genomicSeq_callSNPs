@@ -42,13 +42,33 @@ then we'll run `samtools flagstat` on the bam file to see what % of reads mapped
 
 ## use IGV to browse reads in the region of the genes you knocked out
 
+to get ready for this, download and install IGV on your mac:  
+https://software.broadinstitute.org/software/igv/download
+(I think the 'IGV MacOS App, Java included' version)
+
+we should be able to see the missing region, as well as some reads where the mate-pair did not map to the reference genome
+
+we will also be able to load the vcf files you make later when you call SNPs
+
 
 ## call SNPs and small indels
 
-GATK
+'SNP' in this context means difference from the reference genome assembly
 
-see here, the 'cohort data' section
+GATK pipeline
+
+input: bam files
+output: vcf file (variant calling format)
+
+see this page, the 'cohort data' section
 https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels-
+
+### filter SNPs
+
+ignore low confidence SNPs
+ignore SNPs where knockout and paired control are identical (there will be MANY!)
+
+perhaps annotate SNPs with information about which gene they are in, what effect they have on the gene (e.g. synonymous/non-synonymous), what other strains they are found in, 
 
 
 ## call larger variants 
