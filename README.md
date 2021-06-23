@@ -26,15 +26,19 @@ it is probably self-evident what each of the options mean, but if you want to le
 ## trim reads, maybe (depends on what fastqc output looks like)
 
 remove low quality regions
+
 remove adapter sequences
 
 
 ## map to reference genome
 
 We'll use dm6 version of the reference genome
+
 We'll use the BWA program
 
+
 input:   fastq.gz files
+
 output:  bam files
 
 then we'll run `samtools flagstat` on the bam file to see what % of reads mapped to the genome
@@ -43,12 +47,18 @@ then we'll run `samtools flagstat` on the bam file to see what % of reads mapped
 ## use IGV to browse reads in the region of the genes you knocked out
 
 to get ready for this, download and install IGV on your mac:  
+
 https://software.broadinstitute.org/software/igv/download
+
 (I think the 'IGV MacOS App, Java included' version)
 
-we should be able to see the missing region, as well as some reads where the mate-pair did not map to the reference genome
 
-we will also be able to load the vcf files you make later when you call SNPs
+
+We'll start up IGV, load the reference genome and the bam files of mapped reads.
+
+We should be able to see the deleted region in your gene of interest, as well as some reads where the mate-pair did not map to the reference genome
+
+We will also be able to load the vcf files you will make later when you call SNPs
 
 
 ## call SNPs and small indels
@@ -58,6 +68,7 @@ we will also be able to load the vcf files you make later when you call SNPs
 GATK pipeline
 
 input: bam files
+
 output: vcf file (variant calling format)
 
 see this page, the 'cohort data' section
@@ -66,6 +77,7 @@ https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-va
 ### filter SNPs
 
 ignore low confidence SNPs
+
 ignore SNPs where knockout and paired control are identical (there will be MANY!)
 
 perhaps annotate SNPs with information about which gene they are in, what effect they have on the gene (e.g. synonymous/non-synonymous), what other strains they are found in, 
@@ -75,4 +87,4 @@ perhaps annotate SNPs with information about which gene they are in, what effect
 
 (insertions, deletions, copy number variation, translocations, inversions)
 
-Various other algorithms can do this
+Various other algorithms can do this - we'll want to run several, probably.
