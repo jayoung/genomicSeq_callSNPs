@@ -29,6 +29,8 @@ remove low quality regions
 
 remove adapter sequences
 
+input and output files are both in fastq.gz format
+
 
 ## map to reference genome
 
@@ -65,14 +67,14 @@ We will also be able to load the vcf files you will make later when you call SNP
 
 'SNP' in this context means difference from the reference genome assembly
 
-GATK pipeline
+we'll use the GATK pipeline - see the 'cohort data' section of this page: 
+https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels-
+
 
 input: bam files
 
 output: vcf file (variant calling format)
 
-see this page, the 'cohort data' section
-https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels-
 
 ### filter SNPs
 
