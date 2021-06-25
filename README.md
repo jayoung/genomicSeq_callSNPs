@@ -2,7 +2,7 @@
 
 simple folder to teach Courtney and Risa how to call SNPs in genomic sequence (Drosophila)
 
-## github location
+## github location (notes for Janet)
 
 public:
 https://github.com/jayoung/genomicSeq_callSNPs
@@ -10,18 +10,30 @@ https://github.com/jayoung/genomicSeq_callSNPs
 local:
 /fh/fast/malik_h/user/jayoung/forOtherPeople/forCourtney/genomicSeq_callSNPs
 
+(a reminder of how to sync to github: `git add --all .` then `git commit` then `git push`)
+
 ## download reads to Hutch server
 
-done
+Done.
+
+For each DNA sample, Novogene gave us two files, containing the forward and reverse reads (sample1_1.fastq.gz and sample1_2.fastq.gz). 
+
+Some other sequencing facilities (like the Hutch facility) will give you multiple files for each sample+direction combination, so you have to decide when to combine the files that represent the same sample+direction. Many programs can take multiple input files and consider them as part of the same dataset.
 
 
 ## run fastqc (quality control, get some basic stats on the data)
 
-On the command-line:
+For each file of reads (e.g. sample1_1.fastq.gz), we want to look at quality control metrics.
+
+On the command-line, run a command that looks like this - you will change the last two parts for each sample+direction read dataset. You'll want to specify a uniquely named output directory (--outdir) as well as the input fastq.gz file.
+
+The general format of the fastqc command is `fastqc [options] input file(s)` but I give you more specifics below.
 
 ```
 module load FastQC/0.11.9-Java-11 
-fastqc --outdir fastqc_output/Sample_1_Control_DNA/R2 --format fastq --threads 4 --contaminants /fh/fast/malik_h/user/jayoung/general_notes/NextGenSeqStuff/adapterSequences/variousAdaptersBothStrands.fa.txt ../FASTQ_files/Sample_1_Control_DNA/mySample1_1.fq.gz
+
+fastqc --format fastq --threads 4 --contaminants /fh/fast/malik_h/user/jayoung/general_notes/NextGenSeqStuff/adapterSequences/variousAdaptersBothStrands.fa.txt --outdir fastqc_output/Sample_1_Control_DNA/R2 ../FASTQ_files/Sample_1_Control_DNA/mySample1_1.fq.gz
+
 module purge
 ```
 
