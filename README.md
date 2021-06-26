@@ -51,16 +51,49 @@ input and output files are both in fastq.gz format
 
 ## map to reference genome
 
-We'll use dm6 version of the reference genome
-
-We'll use the BWA program
-
-
-input:   fastq.gz files
-
+input:   fastq.gz files and reference genome assembly
 output:  bam files
 
-then we'll run `samtools flagstat` on the bam file to see what % of reads mapped to the genome
+For the reference genome, I suggest we use the dm6 version of the Drosophila melanogaster genome assembly.  
+
+I also suggest we use a version of dm6 where I have removed the 'chrUn' and 'random' sequences (chinks of sequence that were not assigned to any chromosome).  Some of those are alternative alleles (I think?) of other regions that are in the 'regular' chromosome sequences, and having >1 version of a chromosome sequence present will confuse bwa, as for reads that map to multiple locations, it chooses one location at random.
+
+To map reads we'll use the BWA program. See http://bio-bwa.sourceforge.net. There are three algorithms in the BWA package - we'll use BWA-MEM, which is the best one for reads >70bp
+
+I already formatted that genome assembly for BWA mapping (using the `bwa index` algorithm): `/fh/fast/malik_h/grp/public_databases/UCSC/fly_Aug2014_dm6/dm6_withoutChrUnRandom/dm6_withoutChrUnRandom.fa_bwaFormat/dm6_withoutChrUnRandom.fa`
+
+The general form of a bwa mem command is `bwa mem [options] refGenome.fa read1.fq read2.fq > alignedReads.sam`
+
+Option -t specifies number of threads (CPUs)
+
+```
+module load BWA/0.7.17-GCC-10.2.0
+
+bwa mem -t 4 /fh/fast/malik_h/grp/public_databases/UCSC/fly_Aug2014_dm6/dm6_withoutChrUnRandom/dm6_withoutChrUnRandom.fa_bwaFormat/dm6_withoutChrUnRandom.fa sample1_1.trimmed.fastq.gz sample1_2.trimmed.fastq.gz > sample1.dm6.sam
+
+module purge
+```
+
+BWA creates a 'sam' format file that is NOT sorted by genomic position. You can look at this using a command like 'more' or 'less' or 'cat'.   Most downstream programs want a sorted file, and prefer 'bam' format (similar to sam but compressed, so files are smaller), so we will convert to bam and sort, using samtools (see http://www.htslib.org/doc/samtools.html).  We then create a bam index file that helps other programs use the bam file. We'll remove the intermediate files to save disk space.
+
+The -@ option for samtools specifies number of threads.
+
+We'll also run `samtools flagstat` on the bam file to see what % of reads mapped to the genome
+
+```
+module load SAMtools/1.11-GCC-10.2.0
+
+samtools view -@ 4 -Sb sample1.dm6.sam > sample1.dm6.bam
+samtools sort -@ 4 -O bam sample1.dm6.bam > sample1.dm6.sorted.bam
+samtools index sample1.dm6.sorted.bam
+samtools flagstat sample1.dm6.sorted.bam > sample1.dm6.sorted.bam.flagstats
+
+rm sample1.dm6.sam  sample1.dm6.bam
+
+module purge
+```
+
+
 
 
 ## use IGV to browse reads in the region of the genes you knocked out
@@ -70,7 +103,6 @@ to get ready for this, download and install IGV on your mac:
 https://software.broadinstitute.org/software/igv/download
 
 (I think the 'IGV MacOS App, Java included' version)
-
 
 
 We'll start up IGV, load the reference genome and the bam files of mapped reads.
