@@ -129,6 +129,8 @@ https://software.broadinstitute.org/software/igv/download
 
 We'll start up IGV, load the reference genome and the bam files of mapped reads.
 
+For the reference genome, we'll select `/fh/fast/malik_h/grp/public_databases/UCSC/fly_Aug2014_dm6/dm6_withoutChrUnRandom/dm6_withoutChrUnRandom.fa` (I have already indexed this for use in IGV)
+
 We should be able to see the deleted region in your gene of interest, as well as some reads where the mate-pair did not map to the reference genome
 
 We will also be able to load the vcf files you will make later when you call SNPs
