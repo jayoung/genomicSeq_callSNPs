@@ -39,15 +39,39 @@ module purge
 
 it is probably self-evident what each of the options mean, but if you want to learn more, you can (after doing the module load), do `fastqc --help`  (or google, of course)
 
+## maybe make some very small fastq files so we can test whether our code works as expected.
+
+These commands would take the first 400 lines of the forward and reverse files and save as new files. Each sequence read takes 4 lines, so 400 lines = 100 sequences.
+
+```
+zcat mySample1_1.fq.gz | head -400 > mySample1_1.first100.fq
+gzip mySample1_1.first100.fq
+
+zcat mySample1_2.fq.gz | head -400 > mySample1_2.first100.fq
+gzip mySample1_2.first100.fq
+```
 
 ## trim reads, maybe (depends on what fastqc output looks like)
 
-remove low quality regions
+Remove low quality regions, adapter sequences
 
-remove adapter sequences
+Input and output files are both in fastq.gz format
 
-input and output files are both in fastq.gz format
+The cutadapt program can probably do what we want it to.  We'll run it on BOTH forward and reverse read files at the same time.  We want the two files to stay synced up, i.e. to always contain paired reads in the same order, so if cutadapt decides to reject the forward read, it'll be able to reject the reverse read as well.
 
+The command will look roughly like this, but we'll need to modify it depending on how fastqc output looks. We would replace ADAPT1 and ADAPT2 with the sequences of adapters we want to trim.
+
+```
+module load cutadapt/2.9-foss-2019b-Python-3.7.4 
+
+# to check out all the options:
+cutadapt --help
+
+# our actual command will look something like this
+cutadapt -a ADAPT1 -A ADAPT2 [options] -o mySample1_1.trimmed.fq.gz -p mySample1_2.trimmed.fq.gz mySample1_1.fq.gz mySample1_2.fq.gz
+
+module purge
+```
 
 ## map to reference genome
 
@@ -92,8 +116,6 @@ rm sample1.dm6.sam  sample1.dm6.bam
 
 module purge
 ```
-
-
 
 
 ## use IGV to browse reads in the region of the genes you knocked out
