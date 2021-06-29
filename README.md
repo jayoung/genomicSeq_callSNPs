@@ -68,7 +68,7 @@ module load cutadapt/2.9-foss-2019b-Python-3.7.4
 cutadapt --help
 
 # our actual command will look something like this
-cutadapt -a ADAPT1 -A ADAPT2 [options] -o mySample1_1.trimmed.fq.gz -p mySample1_2.trimmed.fq.gz mySample1_1.fq.gz mySample1_2.fq.gz
+cutadapt --quality-cutoff 30 --cores 4 -a ADAPT1 -A ADAPT2 [options] -o mySample1_1.trimmed.fq.gz -p mySample1_2.trimmed.fq.gz mySample1_1.fq.gz mySample1_2.fq.gz
 
 module purge
 ```
@@ -117,6 +117,8 @@ rm sample1.dm6.sam  sample1.dm6.bam
 module purge
 ```
 
+I suggest putting the BWA and samtools commands in a single shell script file, one for each of your two samples. 
+
 
 ## use IGV to browse reads in the region of the genes you knocked out
 
@@ -126,14 +128,37 @@ https://software.broadinstitute.org/software/igv/download
 
 (I think the 'IGV MacOS App, Java included' version)
 
-
 We'll start up IGV, load the reference genome and the bam files of mapped reads.
 
-For the reference genome, we'll select `/fh/fast/malik_h/grp/public_databases/UCSC/fly_Aug2014_dm6/dm6_withoutChrUnRandom/dm6_withoutChrUnRandom.fa` (I have already indexed this for use in IGV)
+We can talk through how to look at it together, but you might also want to browser the user guide: https://software.broadinstitute.org/software/igv/userguide
 
-We should be able to see the deleted region in your gene of interest, as well as some reads where the mate-pair did not map to the reference genome
+
+### Loading the reference genome, and annotations (genes, repeats, etc)
+
+Option 1: (simplest, but I'm not sure how it will behave)
+Use menu option 'Genomes-Load genome from server' and find D. melanogaster (dm6).
+
+
+Option 2:
+Load the reference genome by pulling up menu option 'Genomes-Load genome from file', then navigating to a version of the reference genome that I have already indexed this for use in IGV: `/fh/fast/malik_h/grp/public_databases/UCSC/fly_Aug2014_dm6/dm6_withoutChrUnRandom/dm6_withoutChrUnRandom.fa` 
+
+We'll also load up the gene annotations - now we use the 'File-Load from file' option and navigate to this file (again - I've already indexed this for use in IGV):
+`/fh/fast/malik_h/grp/public_databases/UCSC/fly_Aug2014_dm6/misc_tracks/dm6_refGene_2018_Jul9.sorted.changeNames_withoutChrUnRandom.bed`
+
+Perhaps also repetitive element annotations - `/fh/fast/malik_h/grp/public_databases/UCSC/fly_Aug2014_dm6/mask_tracks/dm6_rmsk_2018_Jul9_withoutChrUnRandom.bed`
+
+
+### Loading your mapped reads (and later, your SNP calls)
+
+Use menu option 'File-Load from file' and find the bam files you made using BWA.
+
+Then navigate to your region of interest. Sometimes it's helpful to use the UCSC genome browser to look up where in the dm6 assembly something is (e.g. Arp53D is at chr2R:16,774,246-16,775,676).  You can copy-paste coordinates into the IGV box to the left of the 'Go' button.
+
+We should be able to see the deleted region around your gene of interest, as well as some reads where the mate-pair did not map to the reference genome
 
 We will also be able to load the vcf files you will make later when you call SNPs
+
+
 
 
 ## call SNPs and small indels
