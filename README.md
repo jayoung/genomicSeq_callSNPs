@@ -68,7 +68,7 @@ module load cutadapt/2.9-foss-2019b-Python-3.7.4
 cutadapt --help
 
 # our actual command will look something like this
-cutadapt [any_more_options] --quality-cutoff 30 --cores 4 -a ADAPT1 -A ADAPT2 -o mySample1_1.trimmed.fq.gz -p mySample1_2.trimmed.fq.gz mySample1_1.fq.gz mySample1_2.fq.gz
+cutadapt [any_more_options] --quality-cutoff 30 --cores 4 -a ADAPT1 -A ADAPT2 -o mySample1_1.trimmed.fq.gz -p mySample1_2.trimmed.fq.gz mySample1_1.fq.gz mySample1_2.fq.gz > mySample1_2.fq.cutadapt.log.txt 
 
 module purge
 ```
